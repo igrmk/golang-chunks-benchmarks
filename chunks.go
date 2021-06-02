@@ -2,7 +2,7 @@ package chunks
 
 import "bytes"
 
-func Chunks(s string, chunkSize int) []string {
+func ChunksPrevious(s string, chunkSize int) []string {
 	if chunkSize >= len(s) {
 		return []string{s}
 	}
@@ -20,6 +20,28 @@ func Chunks(s string, chunkSize int) []string {
 	if len > 0 {
 		chunks = append(chunks, string(chunk[:len]))
 	}
+	return chunks
+}
+
+func Chunks(s string, chunkSize int) []string {
+	if len(s) == 0 {
+		return nil
+	}
+	if chunkSize >= len(s) {
+		return []string{s}
+	}
+	var chunks []string = make([]string, 0, (len(s)-1)/chunkSize+1)
+	currentLen := 0
+	currentStart := 0
+	for i, _ := range s {
+		if currentLen == chunkSize {
+			chunks = append(chunks, s[currentStart:i])
+			currentLen = 0
+			currentStart = i
+		}
+		currentLen++
+	}
+	chunks = append(chunks, s[currentStart:])
 	return chunks
 }
 
